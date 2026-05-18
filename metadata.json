@@ -1,0 +1,5 @@
+{
+  "name": "Quản Lý Bán Hàng POS",
+  "description": "Hệ thống quản lý bán hàng toàn diện với POS, quản lý đơn hàng, khách hàng và kho hàng.",
+  "requestFramePermissions": []
+}

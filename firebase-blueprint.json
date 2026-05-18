@@ -1,0 +1,113 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Thông tin sản phẩm trong kho",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên sản phẩm" },
+        "price": { "type": "number", "description": "Giá bán" },
+        "stock": { "type": "number", "description": "Số lượng tồn kho" },
+        "category": { "type": "string", "description": "Danh mục" },
+        "sku": { "type": "string", "description": "Mã sản phẩm" },
+        "imageUrl": { "type": "string", "description": "Link ảnh sản phẩm", "format": "uri" }
+      },
+      "required": ["name", "price", "stock"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Thông tin khách hàng",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên khách hàng" },
+        "phone": { "type": "string", "description": "Số điện thoại" },
+        "email": { "type": "string", "description": "Email" },
+        "address": { "type": "string", "description": "Địa chỉ" }
+      },
+      "required": ["name", "phone"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Đơn hàng bán ra",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "description": "ID khách hàng" },
+        "customerName": { "type": "string", "description": "Tên khách hàng (denormalized)" },
+        "items": {
+          "type": "array",
+          "description": "Danh sách sản phẩm trong đơn"
+        },
+        "totalAmount": { "type": "number", "description": "Tổng tiền" },
+        "vat": { "type": "number", "description": "Thuế VAT" },
+        "discount": { "type": "number", "description": "Giảm giá" },
+        "status": { "type": "string", "description": "Trạng thái đơn hàng", "enum": ["completed", "pending", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày tạo" },
+        "createdBy": { "type": "string", "description": "ID người tạo" }
+      },
+      "required": ["items", "totalAmount", "vat", "discount", "status", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Người dùng hệ thống",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "staff"] },
+        "email": { "type": "string" }
+      },
+      "required": ["name", "role", "email"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Danh mục sản phẩm",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên danh mục" },
+        "description": { "type": "string", "description": "Mô tả danh mục" }
+      },
+      "required": ["name"]
+    },
+    "StockHistory": {
+      "title": "StockHistory",
+      "description": "Lịch sử thay đổi tồn kho",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "description": "ID sản phẩm" },
+        "productName": { "type": "string", "description": "Tên sản phẩm" },
+        "oldStock": { "type": "number", "description": "Tồn kho cũ" },
+        "newStock": { "type": "number", "description": "Tồn kho mới" },
+        "change": { "type": "number", "description": "Lượng thay đổi" },
+        "type": { "type": "string", "enum": ["adjustment", "manual", "sale"], "description": "Loại thay đổi" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Thời gian tạo" },
+        "createdBy": { "type": "string", "description": "ID người thực hiện" },
+        "userEmail": { "type": "string", "description": "Email người thực hiện" }
+      },
+      "required": ["productId", "productName", "oldStock", "newStock", "change", "type", "createdAt", "createdBy", "userEmail"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Cấu hình ứng dụng",
+      "type": "object",
+      "properties": {
+        "storeName": { "type": "string" },
+        "storeLogoUrl": { "type": "string" },
+        "storeAddress": { "type": "string" },
+        "storePhone": { "type": "string" },
+        "receiptFooter": { "type": "string" },
+        "paperSize": { "type": "string", "enum": ["80mm", "58mm", "A4"] },
+        "autoPrint": { "type": "boolean" },
+        "showLogoOnReceipt": { "type": "boolean" }
+      },
+      "required": ["storeName", "paperSize", "autoPrint", "showLogoOnReceipt"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": { "schema": "Product", "description": "Danh mục sản phẩm" },
+    "/customers/{customerId}": { "schema": "Customer", "description": "Danh mục khách hàng" },
+    "/orders/{orderId}": { "schema": "Order", "description": "Danh sách đơn hàng" },
+    "/users/{userId}": { "schema": "User", "description": "Thông tin người dùng" },
+    "/categories/{categoryId}": { "schema": "Category", "description": "Danh sách danh mục sản phẩm" },
+    "/stock_history/{historyId}": { "schema": "StockHistory", "description": "Lịch sử kho hàng" },
+    "/settings/{settingId}": { "schema": "Settings", "description": "Cấu hình hệ thống" }
+  }
+}
